@@ -1,9 +1,9 @@
 #include "EuclideanLoopds.h"
 #include "ManageEEPROM.h"
+#include "variables.h"
 #include <Arduino.h>
 
 unsigned long sec;
-static unsigned long lastRefreshTime20ms = 0;
 static unsigned long lastRefreshTime1000ms = 0;
 int storeButton;
 int storeButtonLastState;
@@ -21,26 +21,12 @@ void updateTC() {
 }
 
 void setup() {
-    Serial.begin(9600);
+    sec = 0L;
+    // Serial.begin(9600);
+    sec = readLongFromEEPROM();
     setupLightObjects();
-    sec = 0;
     pinMode(13, INPUT_PULLUP);
     pinMode(12, INPUT_PULLUP);
-    sec = readLongFromEEPROM();
-}
-
-void clk() {
-    if (millis() - lastRefreshTime20ms >= 5) {
-        // increment lastRefreshTime in 20ms intervals
-        lastRefreshTime20ms += 5;
-        // update DMX in 20ms intervals
-        checkEuclideanStates(sec);
-    }
-    if (millis() - lastRefreshTime1000ms >= 1000) {
-        // updateTC in 1 sec intervals
-        lastRefreshTime1000ms += 1000;
-        updateTC();
-    }
 }
 
 void loop() {
@@ -60,6 +46,15 @@ void loop() {
 
     storeButtonLastState = storeButton;
     resetButtonLastState = resetButton;
-    clk();
-    drawState();
+
+    unsigned long milisecs = millis();
+
+    checkEuclideanStates(milisecs);
+
+    if (milisecs - lastRefreshTime1000ms >= 1000) {
+        // updateTC in 1 sec intervals
+        lastRefreshTime1000ms += 1000;
+        updateTC();
+    }
+    // drawState(sec);
 }

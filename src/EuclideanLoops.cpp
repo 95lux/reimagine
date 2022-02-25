@@ -1,4 +1,4 @@
-// #include "DMX.h"
+#include "DMX.h"
 #include "variables.h"
 #include <Arduino.h>
 
@@ -8,6 +8,8 @@ public:
     boolean state;
     int val;
     int division;
+    int fadeTime;
+    unsigned long lastRefresh;
 
     void setId(int i) {
         id = i;
@@ -49,14 +51,31 @@ public:
     void setVal(int v) {
         val = v;
     }
+
+    void setFadeTime(int f) {
+        fadeTime = f;
+    }
+
+    int getFadeTime() {
+        return fadeTime;
+    }
+
+    unsigned long getLastRefresh() {
+        return lastRefresh;
+    }
+
+    void setLastRefresh(unsigned long l) {
+        lastRefresh += l;
+    }
+
     Light() {
         state = false;
+        lastRefresh = 0;
     }
 };
 
 const int arrayLength = sizeof(divisions) / sizeof(divisions[0]);
 Light *lightObjects = new Light[arrayLength];
-int fadeLength = 2;
 
 void setupLightObjects() {
     // Serial.println("setup lightObjects: ");
@@ -64,11 +83,13 @@ void setupLightObjects() {
         lightObjects[i].setId(i);
         lightObjects[i].setDivision(divisions[i]);
         lightObjects[i].setVal(0);
+        lightObjects[i].setFadeTime(fadeTimes[i]);
+        // Serial.println((String) "ID: " + lightObjects[i].getId() + "FadeTime: " + lightObjects[i].getFadeTime());
     }
     // setupDMX();
 }
 
-void triggerEuclideanStates(long count) {
+void triggerEuclideanStates(unsigned long count) {
     for (int i = 0; i < arrayLength; i++) {
         if (count % lightObjects[i].getDivision() == 0) {
             lightObjects[i].triggerState();
@@ -76,7 +97,7 @@ void triggerEuclideanStates(long count) {
     }
 }
 
-void drawState() {
+void drawState(unsigned long count) {
     for (int i = 0; i < arrayLength; i++) {
         int val = lightObjects[i].getVal();
         int len;
@@ -85,30 +106,32 @@ void drawState() {
         } else {
             len = trunc(log10(val)) + 1;
         }
-        Serial.print(val);
-        for (int i; i < 6 - len; i++) {
-            Serial.print(" ");
+        //Serial.print(val);
+        // Serial.print((String) " lRT: " + lightObjects[i].getLastRefresh());
+        for (int i; i < 12 - len; i++) {
+            //Serial.print(" ");
         }
-        Serial.print(" | ");
+        // Serial.print(" | ");
     }
-    Serial.println();
+    // Serial.println((String) "|" + count);
 }
 
-//
-void checkEuclideanStates(long count) {
+void checkEuclideanStates(unsigned long count) {
     for (int i = 0; i < arrayLength; i++) {
         // setDMXVal(i + 1, lightObjects[i].getVal());
-        // Light &currentLight = lightObjects[i];
-        boolean currentState = lightObjects[i].getState();
-        if (currentState) {
-            if (lightObjects[i].getVal() <= 255) {
-                lightObjects[i].incrementVal();
-                // setDMXVal(i + 1, lightObjects[i].getVal());
-            }
-        } else if (!currentState) {
-            if (lightObjects[i].getVal() > 0) {
-                lightObjects[i].decrementVal();
-                // setDMXVal(i + 1, lightObjects[i].getVal());
+        Light &currentLight = lightObjects[i];
+        boolean currentState = currentLight.getState();
+        int specificTickrate = ((long)lightObjects[i].getFadeTime() * 1000L) / 256;
+
+        if (count - currentLight.getLastRefresh() >= specificTickrate) {
+            currentLight.setLastRefresh(specificTickrate);
+
+            if (currentState && currentLight.getVal() <= 255) {
+                currentLight.incrementVal();
+                setDMXVal(i + 1, lightObjects[i].getVal());
+            } else if (!currentState && currentLight.getVal() > 0) {
+                currentLight.decrementVal();
+                setDMXVal(i + 1, lightObjects[i].getVal());
             }
         }
     }

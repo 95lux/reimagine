@@ -1,5 +1,5 @@
 void setupLightObjects();
-void triggerEuclideanStates(long count);
+void triggerEuclideanStates(unsigned long count);
 void triggerState(int index);
-void checkEuclideanStates(long count);
-void drawState();
+void checkEuclideanStates(unsigned long count);
+void drawState(unsigned long count);

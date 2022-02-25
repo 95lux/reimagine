@@ -1,1 +1,2 @@
-extern int divisions[6];
+extern int divisions[12];
+extern int fadeTimes[12];
