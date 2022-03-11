@@ -97,50 +97,46 @@ void triggerEuclideanStates(unsigned long count) {
     }
 }
 
-void drawState(unsigned long count) {
-    for (int i = 0; i < arrayLength; i++) {
-        int val = lightObjects[i].getVal();
-        int len;
-        if (val == 0) {
-            len = 1;
-        } else {
-            len = trunc(log10(val)) + 1;
-        }
-        // Serial.print(val);
-        //  Serial.print((String) " lRT: " + lightObjects[i].getLastRefresh());
-        for (int i; i < 12 - len; i++) {
-            // Serial.print(" ");
-        }
-        // Serial.print(" | ");
-    }
-    // Serial.println((String) "|" + count);
-}
+// void drawState(unsigned long count) {
+//     for (int i = 0; i < arrayLength; i++) {
+//         int val = lightObjects[i].getVal();
+//         int len;
+//         if (val == 0) {
+//             len = 1;
+//         } else {
+//             len = trunc(log10(val)) + 1;
+//         }
+//         Serial.print(val);
+//         // Serial.print((String) " lRT: " + lightObjects[i].getLastRefresh());
+//         for (int i; i < 12 - len; i++) {
+//             Serial.print(" ");
+//         }
+//         Serial.print(" | ");
+//     }
+//     Serial.println((String) "|" + count);
+// }
 
 void checkEuclideanStates(unsigned long count) {
     for (int i = 0; i < arrayLength; i++) {
-        setDMXVal(i + 1, lightObjects[i].getVal());
-        // for (int j = 0; j < 3; i++) {
-        //     setDMXVal(i * 6 + 1 + j, lightObjects[i].getVal());
-        // }
+
         Light &currentLight = lightObjects[i];
         boolean currentState = currentLight.getState();
-        int specificTickrate = ((long)lightObjects[i].getFadeTime() * 1000L) / 256;
+
+        setDMXVal(i + 1, currentLight.getVal());
+
+        int specificTickrate = ((long)currentLight.getFadeTime() * 1000L) / 256;
 
         if (count - currentLight.getLastRefresh() >= specificTickrate) {
             currentLight.setLastRefresh(specificTickrate);
 
-            if (currentState && currentLight.getVal() <= 255) {
+            if (currentState && currentLight.getVal() < 255) {
                 currentLight.incrementVal();
-                // for (int j = 0; j < 3; i++) {
-                // setDMXVal(i * 6 + 1 + j, lightObjects[i].getVal());
-                // }
-                setDMXVal(i + 1, lightObjects[i].getVal());
+
+                setDMXVal(i + 1, currentLight.getVal());
             } else if (!currentState && currentLight.getVal() > 0) {
-                // for (int j = 0; j < 3; i++) {
-                // setDMXVal(i * 6 + 1 + j, lightObjects[i].getVal());
-                // }
+
                 currentLight.decrementVal();
-                setDMXVal(i + 1, lightObjects[i].getVal());
+                setDMXVal(i + 1, currentLight.getVal());
             }
         }
     }

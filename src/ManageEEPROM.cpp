@@ -5,14 +5,14 @@ int address = 0x1;
 
 void printByte(byte byte) {
     for (int i = 7; i >= 0; i--) {
-        // Serial.print(bitRead(byte,i));
+        // Serial.print(bitRead(byte, i));
     }
 }
 
 void writeLongToEEPROM(long number) {
     for (int i = 3; i >= 0; i--) {
         int byteFraction = number >> (8 * i);
-        byte byte = byteFraction & 0xFF; // = 0b11111111 <- Bitmaske
+        byte byte = byteFraction & 0xff; // = 0b11111111 <- Bitmaske
         EEPROM.write(address + i, byte);
     }
     // Serial.println("stored to EEPROM");

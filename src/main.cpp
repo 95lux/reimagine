@@ -25,11 +25,12 @@ void setup() {
     // Serial.begin(9600);
     sec = readLongFromEEPROM();
     setupLightObjects();
-    pinMode(13, INPUT_PULLUP);
     pinMode(12, INPUT_PULLUP);
 }
 
 void loop() {
+    unsigned long milisecs = millis();
+
     storeButton = digitalRead(13);
     resetButton = digitalRead(12);
 
@@ -46,8 +47,6 @@ void loop() {
 
     storeButtonLastState = storeButton;
     resetButtonLastState = resetButton;
-
-    unsigned long milisecs = millis();
 
     checkEuclideanStates(milisecs);
 
