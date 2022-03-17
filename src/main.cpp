@@ -7,6 +7,7 @@ unsigned long sec;
 static unsigned long lastRefreshTime1000ms = 0;
 int storeButton;
 int storeButtonLastState;
+unsigned long storeButtonLastSwitched = 0;
 int resetButton;
 int resetButtonLastState;
 
@@ -34,15 +35,13 @@ void loop() {
     storeButton = digitalRead(13);
     resetButton = digitalRead(12);
 
-    if (storeButton != storeButtonLastState) {
-        if (storeButton == LOW) {
-            writeLongToEEPROM(sec);
-        }
+    if (storeButton != storeButtonLastState && milisecs - storeButtonLastSwitched >= 500 && storeButton == LOW) {
+        writeLongToEEPROM(sec);
+        storeButtonLastSwitched = milisecs;
     }
-    if (resetButton != resetButtonLastState) {
-        if (resetButton == LOW) {
-            resetCounter();
-        }
+
+    if (resetButton != resetButtonLastState && resetButton == LOW) {
+        resetCounter();
     }
 
     storeButtonLastState = storeButton;
