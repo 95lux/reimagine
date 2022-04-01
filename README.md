@@ -15,7 +15,7 @@ For saving the current state of the installation to the internal EEPROM on power
 
 Program is written in the [Platform.io](https://platformio.org/) environment, which allows C++ usage and better code/library management for *arduinoesque* microcontrollers.  
 
-To upload code to the microcontroller, put jumper EN to <span style="text-decoration:overline">EN</span> on DMX shield. This disables usage of the serial port by the dmx shield, thus preventing USB serial connection. After successfull upload revert the position of the jumper back to EN.  
+To upload code to the microcontroller, put jumper EN to !EN on DMX shield. This disables usage of the serial port by the dmx shield, thus preventing USB serial connection. After successfull upload revert the position of the jumper back to EN.  
 
 <p>&nbsp;</p>
 DMX signals are ouptut on channel 1-12. Receiving end is a 12 channel DMX dimmer.  
