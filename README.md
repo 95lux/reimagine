@@ -6,6 +6,8 @@ euclidean-lights
 
 ### Hardware
 
+Maximum usage time of the installation is determined by the max unsigned long value an Arduino can process, which is **2<sup>32</sup>-1** seconds = **4,294,967,295** seconds = ***138.08*** years (Assuming the installation runs 24/7. The timer is stopped when installation is not powered).
+
 The installation utilizes two redundant Arduino Uno microcontrollers, each with a [DMX shield](./documentation/DMX%20Shield%20User%20manual.pdf).  
 The Arduinos are powered by a 5V Meanwell PSU. 5V VIN can be toggled with a flip switch on the front of the panel.
 
@@ -13,11 +15,15 @@ For saving the current state of the installation to the internal EEPROM on power
 
 ### Software
 
+#### *Basic Information*
+
 Program is written in the [Platform.io](https://platformio.org/) environment, which allows C++ usage and better code/library management for *arduinoesque* microcontrollers.  
 
 To upload code to the microcontroller, put jumper EN to !EN on DMX shield. This disables usage of the serial port by the dmx shield, thus preventing USB serial connection. After successfull upload revert the position of the jumper back to EN.  
-
 <p>&nbsp;</p>
+
+
+#### *DMX*
 DMX signals are ouptut on channel 1-12. Receiving end is a 12 channel DMX dimmer.  
 
 Because of the usage of the serial port by the [*Conceptinetics*](https://github.com/alfo/arduino-libraries/tree/master/Conceptinetics) library, any usage of the serial port (Such as debugging via ``Serial.println()`` is disabled when the library is integrated.) For successfull build including the *Conceptinetics* library, delete or comment all code including ``Serial``.

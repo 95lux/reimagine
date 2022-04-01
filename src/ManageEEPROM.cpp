@@ -9,9 +9,9 @@ void printByte(byte byte) {
     }
 }
 
-void writeLongToEEPROM(long number) {
+void writeLongToEEPROM(unsigned long number) {
     for (int i = 3; i >= 0; i--) {
-        int byteFraction = number >> (8 * i);
+        unsigned long byteFraction = number >> (8 * i);
         byte byte = byteFraction & 0xff; // = 0b11111111 <- Bitmaske
         EEPROM.write(address + i, byte);
     }
