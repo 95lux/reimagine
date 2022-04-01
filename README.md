@@ -15,15 +15,12 @@ For saving the current state of the installation to the internal EEPROM on power
 
 ### Software
 
-#### *Basic Information*
-
 Program is written in the [Platform.io](https://platformio.org/) environment, which allows C++ usage and better code/library management for *arduinoesque* microcontrollers.  
 
 To upload code to the microcontroller, put jumper EN to !EN on DMX shield. This disables usage of the serial port by the dmx shield, thus preventing USB serial connection. After successfull upload revert the position of the jumper back to EN.  
 <p>&nbsp;</p>
 
 
-#### *DMX*
 DMX signals are ouptut on channel 1-12. Receiving end is a 12 channel DMX dimmer.  
 
 Because of the usage of the serial port by the [*Conceptinetics*](https://github.com/alfo/arduino-libraries/tree/master/Conceptinetics) library, any usage of the serial port (Such as debugging via ``Serial.println()`` is disabled when the library is integrated.) For successfull build including the *Conceptinetics* library, delete or comment all code including ``Serial``.
