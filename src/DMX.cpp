@@ -13,3 +13,7 @@ void setupDMX() {
 void setDMXVal(int id, int val) {
     dmx_master.setChannelValue(id, val);
 }
+
+void disableDMX() {
+    dmx_master.disable();
+}

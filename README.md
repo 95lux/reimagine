@@ -23,8 +23,7 @@ To upload code to the microcontroller, put jumper EN to !EN on DMX shield. This 
 
 DMX signals are ouptut on channel 1-12. Receiving end is a 12 channel DMX dimmer.  
 
-Because of the usage of the serial port by the [*Conceptinetics*](https://github.com/alfo/arduino-libraries/tree/master/Conceptinetics) library, any usage of the serial port (Such as debugging via ``Serial.println()`` is disabled when the library is integrated.) For successfull build including the *Conceptinetics* library, delete or comment all code including ``Serial``.
-
+Because of the usage of the serial port by the [*Conceptinetics*](https://github.com/alfo/arduino-libraries/tree/master/Conceptinetics) library, any usage of the serial port (Such as debugging via ``Serial.println()`` is disabled when the library is integrated.) For successfull build including the *Conceptinetics* library, delete or comment all code containing ``Serial``.
 
 <p>&nbsp;</p>
 

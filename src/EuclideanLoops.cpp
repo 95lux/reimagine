@@ -141,3 +141,9 @@ void checkEuclideanStates(unsigned long count) {
         }
     }
 }
+
+void switchOffLights() {
+    for (int i = 0; i < arrayLength; i++) {
+        setDMXVal(i + 1, 0);
+    }
+}

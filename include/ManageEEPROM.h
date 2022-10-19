@@ -1,2 +1,2 @@
 long readLongFromEEPROM();
-void writeLongToEEPROM(long number);
+void writeLongToEEPROM(unsigned long number);
