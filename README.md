@@ -25,6 +25,8 @@ DMX signals are ouptut on channel 1-12. Receiving end is a 12 channel DMX dimmer
 
 Because of the usage of the serial port by the [*Conceptinetics*](https://github.com/alfo/arduino-libraries/tree/master/Conceptinetics) library, any usage of the serial port (Such as debugging via ``Serial.println()`` is disabled when the library is integrated.) For successfull build including the *Conceptinetics* library, delete or comment all code containing ``Serial``.
 
+For debugging purposes uncomment the MACRO definition ``DEBUG`` in ``./include/define.h``. This will reenable The usage of Serial monitor.
+
 <p>&nbsp;</p>
 
 Timings for divisions and fadetimes are changed in the int[] array in [./src/variables.cpp](./src/variables.cpp) (in seconds).  
@@ -48,7 +50,7 @@ Timings for divisions and fadetimes are changed in the int[] array in [./src/var
     <th>12</th>
   </tr>
   <tr>
-    <th>Division (in sec)</th>
+    <th>Pause Time (in sec)</th>
     <td>34</td>
     <td>27</td>
     <td>44</td>
@@ -63,7 +65,7 @@ Timings for divisions and fadetimes are changed in the int[] array in [./src/var
     <td>36</td>
   </tr>
   <tr>
-    <th>Fadetime (in sec)</th>
+    <th>Fade Time (in sec)</th>
     <td>22</td>
     <td>21</td>
     <td>27</td>
