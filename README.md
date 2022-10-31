@@ -25,7 +25,7 @@ DMX signals are ouptut on channel 1-12. Receiving end is a 12 channel DMX dimmer
 
 Because of the usage of the serial port by the [*Conceptinetics*](https://github.com/alfo/arduino-libraries/tree/master/Conceptinetics) library, any usage of the serial port (Such as debugging via ``Serial.println()`` is disabled when the library is integrated.) For successfull build including the *Conceptinetics* library, delete or comment all code containing ``Serial``.
 
-For debugging purposes uncomment the MACRO definition ``DEBUG`` in ``./include/define.h``. This will reenable The usage of Serial monitor.
+For debugging purposes uncomment the MACRO definition ``DEBUG`` in [./include/define.h](./include/define.h). This will reenable The usage of Serial monitor.
 
 <p>&nbsp;</p>
 
