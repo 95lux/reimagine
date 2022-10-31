@@ -1,11 +1,10 @@
 #include "DMX.h"
 #include "EuclideanLoops.h"
 #include "ManageEEPROM.h"
+#include "define.h"
 #include "variables.h"
 #include <Arduino.h>
 #include <avr/sleep.h>
-
-// #define DEBUG
 
 unsigned long sec;
 static unsigned long lastRefreshTime1000ms = 0;
@@ -19,44 +18,34 @@ void resetCounter() {
     sec = 0L;
 }
 
-void updateTC() {
-    sec++;
-// Serial.println(sec);
-#ifndef DEBUG
-    triggerEuclideanStates(sec);
-#endif
-}
-
 void setup() {
     sec = 0L;
 #ifdef DEBUG
     Serial.begin(9600);
 #endif
     sec = readLongFromEEPROM();
-#ifndef DEBUG
-    setupLightObjects();
-#endif
+    setupLightObjects(sec);
     pinMode(12, INPUT_PULLUP);
 }
 
 void loop() {
-    unsigned long milisecs = millis();
+    unsigned long millisecs = millis();
     storeButton = digitalRead(13);
     resetButton = digitalRead(12);
 
     if (storeButton == LOW) {
         switchOffLights();
-        if (milisecs - storeButtonLastSwitched >= 20000) {
-            // write to eeprom after 20 secs if no power is available, then go to sleep
+        if (millisecs - storeButtonLastSwitched >= 20000) {
+            // write to eeprom after 20 secs if no power is available, then disable DMX (Output on Pin 2,3)
             writeLongToEEPROM(sec);
             disableDMX();
         }
-        storeButtonLastSwitched = milisecs;
+        storeButtonLastSwitched = millisecs;
     } else if (storeButton == HIGH) {
         if (storeButton != storeButtonLastState) {
             setupDMX();
         }
-        checkEuclideanStates(milisecs);
+        checkEuclideanStates(sec, millisecs);
     }
 
     if (resetButton != resetButtonLastState && resetButton == LOW) {
@@ -66,10 +55,11 @@ void loop() {
     storeButtonLastState = storeButton;
     resetButtonLastState = resetButton;
 
-    if (milisecs - lastRefreshTime1000ms >= 1000) {
+    if (millisecs - lastRefreshTime1000ms >= 1000) {
         // updateTC in 1 sec intervals
-        lastRefreshTime1000ms += 1000;
-        updateTC();
+        lastRefreshTime1000ms = millisecs;
+        sec++;
+        // updateTC();
     }
 
     // drawState(sec);
