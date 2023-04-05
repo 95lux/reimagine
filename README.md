@@ -1,4 +1,4 @@
-euclidean-lights
+Reimagine
 ==================
 12 channel light installation by Ólafur Elíasson
 ------------------
